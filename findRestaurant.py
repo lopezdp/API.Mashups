@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from geocode import getGeocodeLocation
 import json
 import httplib2
@@ -5,16 +6,19 @@ import httplib2
 import sys
 import codecs
 
-print('inside find')
+# print(sys.stdout.encoding)
 
-sys.stdout = codecs.getwriter('utf8')(sys.stdout)
-sys.stderr = codecs.getwriter('utf8')(sys.stderr)
+# print('inside find')
+# Added the python encoding to bash_profile to eliminate below
+#sys.stdout = codecs.getwriter('utf8')(sys.stdout)
+#sys.stderr = codecs.getwriter('utf8')(sys.stderr)
 
 foursquare_client_id = ""
 foursquare_client_secret = ""
 
+
 def findARestaurant(mealType,location):
-	print('inside findFxn')
+	# print('inside findFxn')
 	#1. Use getGeocodeLocation to get the latitude and longitude coordinates of the location string.
 	latitude, longitude = getGeocodeLocation(location)
 	#2.  Use foursquare API to find a nearby restaurant with the latitude, longitude, and mealType strings.
@@ -22,6 +26,7 @@ def findARestaurant(mealType,location):
 	url = ('https://api.foursquare.com/v2/venues/search?client_id=%s&client_secret=%s&v=20130815&ll=%s,%s&query=%s' % (foursquare_client_id, foursquare_client_secret,latitude,longitude,mealType))
 	h = httplib2.Http()
 	result = json.loads(h.request(url,'GET')[1])
+
 
 	if result['response']['venues']:
 		#3.  Grab the first restaurant
@@ -56,7 +61,6 @@ def findARestaurant(mealType,location):
 		return "No Restaurants Found"
 
 if __name__ == '__main__':
-	import sys
 	findARestaurant("Pizza", "Tokyo, Japan")
 	findARestaurant("Tacos", "Jakarta, Indonesia")
 	findARestaurant("Tapas", "Maputo, Mozambique")
